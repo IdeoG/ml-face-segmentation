@@ -41,7 +41,8 @@ def inference(image: Union[Image.Image, np.ndarray], mode='pil', hair_threshold=
     :param hair_threshold: Binary threshold for each mask channel [0,1]
     :return: mask
     """
-
+    # TODO: In some cases we get holes in area and we should convert area to connected one.
+    #       In some cases we get 3 different areas and we should pick area with higher surface
     inputs = prepare_nn_image(image, mode, _hair_model, input_size=256, require_same_dims=False)
     outputs = _hair_model.forward(inputs)
 
