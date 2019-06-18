@@ -2,12 +2,14 @@ import argparse
 import logging
 
 from aiohttp import web
-
+from face_segmentation.hair_segmentation import prepare_model
 from ms_utils.logger import AccessLogger
 from ms_utils.routes import routes
 
 
 def run_server(host, port):
+    prepare_model('./')
+
     app = web.Application()
     app.add_routes(routes=routes)
     web.run_app(app, host=host, port=port, access_log_class=AccessLogger)

@@ -22,7 +22,8 @@ def prepare_model(model_dir_path: str, is_root_dir=True):
     :return:
     """
     global _hair_model
-
+    
+    logger.debug(f"prepare_model: Started to load model.")
     state_dict_path = f"{model_dir_path}/{_hair_model_path}" if is_root_dir else model_dir_path
     _hair_model = DeepLabv3_plus(nInputChannels=3, n_classes=1, os=16, pretrained=True, _print=False)
     _hair_model.load_state_dict(torch.load(state_dict_path))

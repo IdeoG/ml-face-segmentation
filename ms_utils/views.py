@@ -4,18 +4,17 @@ import io
 from PIL import Image
 from aiohttp import web
 
+from face_segmentation.hair_segmentation import inference
+
 
 class RecognitionPresenter:
 
-    def __init__(self):
-        self._model = None
-
-    async def recognize_face(self, data):
+    async def segmentation(self, data):
         bytes = base64.b64decode(data['base64image'])
         image = Image.open(io.BytesIO(bytes))
-        _ = self._model.embeddings(image)
+        mask = inference(image)
 
-        response = {}
+        response = {'mask': base64.b64encode(mask.tobytes())}
         return response
 
 
@@ -31,5 +30,5 @@ class Recognition(BaseView):
     async def post(self):
         data = await self.request.json()
 
-        response = await self._presenter.recognize_face(data)
+        response = await self._presenter.segmentation(data)
         return web.json_response(response)
